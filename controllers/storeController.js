@@ -24,3 +24,24 @@ exports.getStores = async (req, res) => {
 
   res.render('stores', {title: 'Stores', stores})
 };
+
+exports.editStore = async (req, res) => {
+  // 1. Find store given ID
+  const store = await Store.findOne({_id: req.params.id});
+  // 2. Confirm they are the owner of the store
+  // TODO
+  // 3. Render the dit form to edit the store
+  res.render('editStore', {title: `Edit ${store.name}`, store})
+};
+
+exports.updateStore = async (req, res) => {
+  // 1. Find and update the store
+  const store = await Store.findOneAndUpdate({_id: req.params.id}, req.body, {
+    new: true, // Return new store instead of the old store
+    runValidators: true,
+  }).exec();
+  req.flash('success', `Successfully updated ${store.name}. <a href="/stores/${store.slug}">View Store</a>`)
+  // 2. Redirect to the store, Say it worked
+  res.redirect(`/stores/${store._id}/edit`);
+
+};
