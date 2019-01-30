@@ -77,6 +77,32 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+function autocomplete(input, latInput, lngInput) {
+  if (!input) return;
+  var dropdown = new google.maps.places.Autocomplete(input);
+  dropdown.addListener('place_changed', function () {
+    var place = dropdown.getPlace();
+    latInput.value = place.geometry.location.lat();
+    lngInput.value = place.geometry.location.lng();
+  });
+  // If someone hits enter on the address field, don't submit.
+  input.on('keydown', function (e) {
+    if (e.keyCode === 13) e.preventDefault();
+  });
+}
+
+exports.default = autocomplete;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 // based on https://gist.github.com/paulirish/12fb951a8b893a454b32
 
 var $ = document.querySelector.bind(document);
@@ -113,6 +139,14 @@ exports.$$ = $$;
 __webpack_require__(2);
 
 var _bling = __webpack_require__(1);
+
+var _autocomplete = __webpack_require__(0);
+
+var _autocomplete2 = _interopRequireDefault(_autocomplete);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+(0, _autocomplete2.default)((0, _bling.$)('#address'), (0, _bling.$)('#lat'), (0, _bling.$)('#lng'));
 
 /***/ })
 /******/ ]);
